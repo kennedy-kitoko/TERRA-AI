@@ -1,6 +1,9 @@
 # TERRA-AI
 TERRA AGRICOL
 
+
+![Description de l'image](schema.png)
+
 # 📦 GUIDE D'INSTALLATION - TerraSoil Library
 
 ## 🎯 Méthode 1 : Installation via fichier ZIP (RECOMMANDÉ)
