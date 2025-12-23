@@ -2,7 +2,7 @@
 TERRA AGRICOL
 
 
-![Description de l'image](schema.png)
+![Description de l'image](SCHEMA.png)
 
 # 📦 GUIDE D'INSTALLATION - TerraSoil Library
 
