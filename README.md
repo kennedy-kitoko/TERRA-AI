@@ -31,7 +31,7 @@ Généralement, lire un capteur industriel demande de jongler avec des codes hex
 
 ## 🔌 Schéma de principe (Hardware)
 
-TerraSoil utilise le **Circuit B** du standard RS485. Vous avez besoin d'un petit module adaptateur (TTL vers RS485) entre votre microcontrôleur et le capteur.
+TerraSoil utilise le **Circuit B** du standard RS485[LIEN ](https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/peripherals/uart.html). Vous avez besoin d'un petit module adaptateur (TTL vers RS485) entre votre microcontrôleur et le capteur.
 
 * **ESP32** → Envoie les commandes (TX/RX/RTS).
 * **Adaptateur RS485** → Convertit les signaux pour le capteur.
