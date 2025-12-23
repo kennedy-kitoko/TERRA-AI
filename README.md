@@ -1,3 +1,6 @@
+
+![Description de l'image](terra.png)
+
 # 🌱 À propos de TerraSoil
 
 **TerraSoil** est une bibliothèque Arduino/ESP32 simplifiée conçue pour transformer un capteur industriel complexe en un outil de monitoring accessible. Elle a été développée spécifiquement pour les capteurs de sol "10-en-1" utilisant le protocole de communication **RS485 Modbus RTU**.
