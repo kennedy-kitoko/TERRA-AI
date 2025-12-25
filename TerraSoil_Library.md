@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![TerraSoil Logo](TERRASOIL.png)
+![TerraSoil Logo](terrasoill.jpg)
 
 ![Version](https://img.shields.io/badge/version-1.0.0-green)
 ![Arduino](https://img.shields.io/badge/Arduino-Compatible-brightgreen)
