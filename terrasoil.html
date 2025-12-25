@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TerraSoil - Smart Agriculture Library</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <style>
+    :root {
+      --earth-dark: #2D1810;
+      --earth-brown: #5C3D2E;
+      --earth-medium: #8B5A2B;
+      --earth-light: #C4A77D;
+      --green-dark: #1B4332;
+      --green-primary: #2D6A4F;
+      --green-light: #40916C;
+      --green-pale: #74C69D;
+      --green-glow: #95D5B2;
+      --cream: #FEFAE0;
+      --white: #FFFFFF;
+      --glass-white: rgba(255, 255, 255, 0.15);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: linear-gradient(135deg, var(--earth-dark) 0%, var(--green-dark) 50%, var(--earth-brown) 100%);
+      min-height: 100vh;
+      color: var(--cream);
+      overflow-x: hidden;
+    }
+    .bg-pattern {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .bg-pattern::before {
+      content: '';
+      position: absolute;
+      width: 200%; height: 200%;
+      top: -50%; left: -50%;
+      background: 
+        radial-gradient(ellipse at 20% 30%, rgba(64, 145, 108, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 70%, rgba(139, 90, 43, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(45, 106, 79, 0.08) 0%, transparent 60%);
+      animation: bgFloat 20s ease-in-out infinite;
+    }
+    @keyframes bgFloat {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(-2%, -2%) rotate(2deg); }
+    }
+    .particles {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .particle {
+      position: absolute;
+      width: 6px; height: 6px;
+      background: var(--green-pale);
+      border-radius: 50%;
+      opacity: 0.3;
+      animation: float 15s infinite ease-in-out;
+    }
+    .particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 18s; }
+    .particle:nth-child(2) { left: 20%; animation-delay: 2s; animation-duration: 22s; }
+    .particle:nth-child(3) { left: 35%; animation-delay: 4s; animation-duration: 16s; }
+    .particle:nth-child(4) { left: 50%; animation-delay: 1s; animation-duration: 20s; }
+    .particle:nth-child(5) { left: 65%; animation-delay: 3s; animation-duration: 24s; }
+    .particle:nth-child(6) { left: 80%; animation-delay: 5s; animation-duration: 17s; }
+    .particle:nth-child(7) { left: 90%; animation-delay: 2s; animation-duration: 21s; }
+    @keyframes float {
+      0%, 100% { transform: translateY(100vh) scale(0); opacity: 0; }
+      10% { opacity: 0.4; }
+      90% { opacity: 0.4; }
+      100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+    }
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 1.5rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(20px);
+      background: rgba(27, 67, 50, 0.4);
+      border-bottom: 1px solid rgba(116, 198, 157, 0.2);
+      transition: all 0.3s ease;
+    }
+    nav.scrolled {
+      padding: 1rem 5%;
+      background: rgba(27, 67, 50, 0.8);
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--green-glow);
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 45px; height: 45px;
+      background: linear-gradient(135deg, var(--green-light) 0%, var(--green-dark) 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 4px 15px rgba(64, 145, 108, 0.4);
+    }
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--cream);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      position: relative;
+      padding: 0.5rem 0;
+      transition: color 0.3s ease;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0;
+      width: 0; height: 2px;
+      background: var(--green-pale);
+      transition: width 0.3s ease;
+    }
+    .nav-links a:hover { color: var(--green-glow); }
+    .nav-links a:hover::after { width: 100%; }
+    .nav-cta {
+      background: linear-gradient(135deg, var(--green-light) 0%, var(--green-primary) 100%);
+      color: var(--white) !important;
+      padding: 0.75rem 1.75rem !important;
+      border-radius: 50px;
+      font-weight: 600 !important;
+      box-shadow: 0 4px 20px rgba(64, 145, 108, 0.4);
+      transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    }
+    .nav-cta::after { display: none !important; }
+    .nav-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(64, 145, 108, 0.5) !important;
+    }
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      z-index: 1001;
+    }
+    .menu-toggle span {
+      width: 28px; height: 3px;
+      background: var(--cream);
+      border-radius: 3px;
+      transition: all 0.3s ease;
+    }
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 8rem 5% 4rem;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .hero-text h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 6vw, 5rem);
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      background: linear-gradient(135deg, var(--cream) 0%, var(--green-glow) 50%, var(--earth-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-text .subtitle {
+      font-size: 1.35rem;
+      color: var(--green-pale);
+      margin-bottom: 2rem;
+      line-height: 1.6;
+      font-weight: 300;
+    }
+    .hero-stats {
+      display: flex;
+      gap: 2.5rem;
+      margin-bottom: 2.5rem;
+    }
+    .stat { text-align: center; }
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--green-glow);
+      display: block;
+    }
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--earth-light);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 1rem 2.5rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--green-light) 0%, var(--green-primary) 100%);
+      color: var(--white);
+      box-shadow: 0 8px 30px rgba(64, 145, 108, 0.4);
+    }
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(64, 145, 108, 0.5);
+    }
+    .btn-secondary {
+      background: var(--glass-white);
+      backdrop-filter: blur(10px);
+      color: var(--cream);
+      border: 1px solid rgba(116, 198, 157, 0.3);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.25);
+      border-color: var(--green-pale);
+    }
+    .hero-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .sensor-card {
+      width: 100%;
+      max-width: 500px;
+      background: linear-gradient(145deg, rgba(45, 106, 79, 0.3) 0%, rgba(27, 67, 50, 0.5) 100%);
+      backdrop-filter: blur(20px);
+      border-radius: 30px;
+      padding: 2.5rem;
+      border: 1px solid rgba(116, 198, 157, 0.2);
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    }
+    .sensor-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(116, 198, 157, 0.2);
+    }
+    .sensor-icon {
+      width: 60px; height: 60px;
+      background: linear-gradient(135deg, var(--green-light) 0%, var(--earth-medium) 100%);
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+    }
+    .sensor-title h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--cream);
+    }
+    .sensor-title span {
+      font-size: 0.85rem;
+      color: var(--green-pale);
+    }
+    .sensor-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    .sensor-item {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 15px;
+      padding: 1.25rem;
+      border: 1px solid rgba(116, 198, 157, 0.1);
+      transition: all 0.3s ease;
+    }
+    .sensor-item:hover {
+      background: rgba(64, 145, 108, 0.2);
+      border-color: var(--green-pale);
+      transform: translateY(-3px);
+    }
+    .sensor-item-icon { font-size: 1.25rem; margin-bottom: 0.5rem; }
+    .sensor-item-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--green-glow);
+    }
+    .sensor-item-label {
+      font-size: 0.75rem;
+      color: var(--earth-light);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .float-element {
+      position: absolute;
+      animation: floatElement 6s ease-in-out infinite;
+    }
+    .float-1 {
+      top: -30px; right: -30px;
+      width: 80px; height: 80px;
+      background: linear-gradient(135deg, var(--green-pale) 0%, var(--green-light) 100%);
+      border-radius: 20px;
+      opacity: 0.6;
+    }
+    .float-2 {
+      bottom: 50px; left: -40px;
+      width: 60px; height: 60px;
+      background: linear-gradient(135deg, var(--earth-medium) 0%, var(--earth-light) 100%);
+      border-radius: 50%;
+      opacity: 0.5;
+      animation-delay: 1s;
+    }
+    .float-3 {
+      top: 40%; right: -50px;
+      width: 40px; height: 40px;
+      background: var(--green-glow);
+      border-radius: 10px;
+      opacity: 0.4;
+      animation-delay: 2s;
+      transform: rotate(45deg);
+    }
+    @keyframes floatElement {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(5deg); }
+    }
+    section {
+      padding: 6rem 5%;
+      position: relative;
+      z-index: 2;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+    .section-tag {
+      display: inline-block;
+      padding: 0.5rem 1.5rem;
+      background: rgba(64, 145, 108, 0.2);
+      border: 1px solid var(--green-light);
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--green-pale);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      color: var(--cream);
+      margin-bottom: 1rem;
+    }
+    .section-subtitle {
+      font-size: 1.15rem;
+      color: var(--earth-light);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+    .features {
+      background: linear-gradient(180deg, transparent 0%, rgba(27, 67, 50, 0.3) 50%, transparent 100%);
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .feature-card {
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+      backdrop-filter: blur(20px);
+      border-radius: 25px;
+      padding: 2.5rem;
+      border: 1px solid rgba(116, 198, 157, 0.15);
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, var(--green-light) 0%, var(--green-primary) 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      z-index: -1;
+    }
+    .feature-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--green-pale);
+      box-shadow: 0 20px 60px rgba(64, 145, 108, 0.3);
+    }
+    .feature-card:hover::before { opacity: 0.1; }
+    .feature-icon {
+      width: 70px; height: 70px;
+      background: linear-gradient(135deg, var(--green-light) 0%, var(--green-primary) 100%);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 10px 30px rgba(64, 145, 108, 0.3);
+    }
+    .feature-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      color: var(--cream);
+      margin-bottom: 1rem;
+    }
+    .feature-card p {
+      color: var(--earth-light);
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+    .parameters {
+      background: linear-gradient(180deg, rgba(45, 24, 16, 0.3) 0%, transparent 100%);
+    }
+    .param-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.5rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .param-item {
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.03) 100%);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      border: 1px solid rgba(116, 198, 157, 0.15);
+      transition: all 0.4s ease;
+      cursor: pointer;
+    }
+    .param-item:hover {
+      transform: scale(1.05);
+      background: linear-gradient(145deg, rgba(64, 145, 108, 0.3) 0%, rgba(45, 106, 79, 0.2) 100%);
+      border-color: var(--green-pale);
+    }
+    .param-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+    .param-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: var(--cream);
+      margin-bottom: 0.5rem;
+    }
+    .param-range {
+      font-size: 0.8rem;
+      color: var(--green-pale);
+    }
+    .code-section {
+      background: linear-gradient(180deg, transparent 0%, rgba(27, 67, 50, 0.2) 100%);
+    }
+    .code-showcase {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .code-tabs {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .code-tab {
+      padding: 1rem 2rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: none;
+      border-radius: 15px 15px 0 0;
+      color: var(--earth-light);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .code-tab.active {
+      background: rgba(45, 106, 79, 0.5);
+      color: var(--green-glow);
+    }
+    .code-tab:hover:not(.active) {
+      background: rgba(255, 255, 255, 0.1);
+    }
+    .code-block {
+      background: linear-gradient(145deg, rgba(27, 67, 50, 0.8) 0%, rgba(45, 24, 16, 0.9) 100%);
+      border-radius: 0 20px 20px 20px;
+      padding: 2rem;
+      border: 1px solid rgba(116, 198, 157, 0.2);
+      overflow-x: auto;
+      position: relative;
+    }
+    .code-block pre {
+      font-family: 'Fira Code', 'Courier New', monospace;
+      font-size: 0.9rem;
+      line-height: 1.8;
+      color: var(--cream);
+      margin: 0;
+    }
+    .code-block .keyword { color: var(--green-glow); }
+    .code-block .string { color: var(--earth-light); }
+    .code-block .function { color: var(--green-pale); }
+    .code-block .number { color: #f4a261; }
+    .copy-btn {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(116, 198, 157, 0.3);
+      color: var(--cream);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+    }
+    .copy-btn:hover { background: var(--green-primary); }
+    .applications {
+      background: linear-gradient(180deg, rgba(45, 24, 16, 0.2) 0%, transparent 100%);
+    }
+    .app-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2.5rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .app-card {
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+      backdrop-filter: blur(20px);
+      border-radius: 25px;
+      overflow: hidden;
+      border: 1px solid rgba(116, 198, 157, 0.15);
+      transition: all 0.4s ease;
+    }
+    .app-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--green-pale);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+    }
+    .app-image {
+      height: 200px;
+      background: linear-gradient(135deg, var(--green-dark) 0%, var(--earth-brown) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      position: relative;
+    }
+    .app-image::before {
+      content: '';
+      position: absolute;
+      width: 100%; height: 100%;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2374C69D' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      opacity: 0.5;
+    }
+    .app-content { padding: 2rem; }
+    .app-content h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--cream);
+      margin-bottom: 1rem;
+    }
+    .app-content p {
+      color: var(--earth-light);
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+    .app-stats { display: flex; gap: 2rem; }
+    .app-stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      color: var(--green-glow);
+      font-weight: 600;
+    }
+    .app-stat-label {
+      font-size: 0.75rem;
+      color: var(--earth-light);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .developer {
+      background: linear-gradient(180deg, transparent 0%, rgba(27, 67, 50, 0.3) 100%);
+    }
+    .dev-card {
+      max-width: 900px;
+      margin: 0 auto;
+      background: linear-gradient(145deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.03) 100%);
+      backdrop-filter: blur(20px);
+      border-radius: 30px;
+      padding: 3rem;
+      border: 1px solid rgba(116, 198, 157, 0.2);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    .dev-avatar {
+      width: 180px; height: 180px;
+      background: linear-gradient(135deg, var(--green-light) 0%, var(--earth-medium) 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      box-shadow: 0 20px 50px rgba(64, 145, 108, 0.3);
+    }
+    .dev-info h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--cream);
+      margin-bottom: 0.5rem;
+    }
+    .dev-info .dev-title {
+      color: var(--green-pale);
+      font-size: 1.1rem;
+      margin-bottom: 1.5rem;
+    }
+    .dev-details {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .dev-detail {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--earth-light);
+      font-size: 0.95rem;
+    }
+    .dev-detail i {
+      color: var(--green-pale);
+      width: 20px;
+    }
+    .dev-socials { display: flex; gap: 1rem; }
+    .social-link {
+      width: 45px; height: 45px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--cream);
+      font-size: 1.2rem;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(116, 198, 157, 0.2);
+    }
+    .social-link:hover {
+      background: var(--green-primary);
+      transform: translateY(-3px);
+    }
+    .cta {
+      background: linear-gradient(180deg, transparent 0%, rgba(45, 24, 16, 0.4) 100%);
+      text-align: center;
+      padding: 8rem 5%;
+    }
+    .cta-content { max-width: 800px; margin: 0 auto; }
+    .cta h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      color: var(--cream);
+      margin-bottom: 1.5rem;
+    }
+    .cta p {
+      color: var(--earth-light);
+      font-size: 1.2rem;
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    footer {
+      background: rgba(27, 67, 50, 0.5);
+      backdrop-filter: blur(20px);
+      padding: 4rem 5% 2rem;
+      position: relative;
+      z-index: 2;
+      border-top: 1px solid rgba(116, 198, 157, 0.2);
+    }
+    .footer-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 4rem;
+      margin-bottom: 3rem;
+    }
+    .footer-brand { max-width: 350px; }
+    .footer-brand .logo { margin-bottom: 1.5rem; }
+    .footer-brand p {
+      color: var(--earth-light);
+      line-height: 1.7;
+      font-size: 0.95rem;
+    }
+    .footer-column h4 {
+      font-family: 'Playfair Display', serif;
+      color: var(--cream);
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+    }
+    .footer-column ul { list-style: none; }
+    .footer-column li { margin-bottom: 0.75rem; }
+    .footer-column a {
+      color: var(--earth-light);
+      text-decoration: none;
+      transition: color 0.3s ease;
+      font-size: 0.95rem;
+    }
+    .footer-column a:hover { color: var(--green-glow); }
+    .footer-bottom {
+      padding-top: 2rem;
+      border-top: 1px solid rgba(116, 198, 157, 0.15);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-bottom p {
+      color: var(--earth-light);
+      font-size: 0.9rem;
+    }
+    .footer-bottom p a {
+      color: var(--green-pale);
+      text-decoration: none;
+    }
+    @media (max-width: 1024px) {
+      .hero-content { grid-template-columns: 1fr; text-align: center; }
+      .hero-stats { justify-content: center; }
+      .hero-buttons { justify-content: center; }
+      .hero-visual { order: -1; }
+      .sensor-card { max-width: 450px; }
+      .param-grid { grid-template-columns: repeat(3, 1fr); }
+      .dev-card { grid-template-columns: 1fr; text-align: center; }
+      .dev-avatar { margin: 0 auto; }
+      .dev-details { grid-template-columns: 1fr; }
+      .dev-detail { justify-content: center; }
+      .dev-socials { justify-content: center; }
+      .footer-content { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 768px) {
+      .nav-links {
+        position: fixed;
+        top: 0; right: -100%;
+        width: 80%;
+        max-width: 400px;
+        height: 100vh;
+        background: rgba(27, 67, 50, 0.98);
+        backdrop-filter: blur(20px);
+        flex-direction: column;
+        padding: 6rem 2rem;
+        transition: right 0.4s ease;
+        gap: 2rem;
+      }
+      .nav-links.active { right: 0; }
+      .menu-toggle { display: flex; }
+      .param-grid { grid-template-columns: repeat(2, 1fr); }
+      .app-cards { grid-template-columns: 1fr; }
+      .footer-content { grid-template-columns: 1fr; text-align: center; }
+      .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+    }
+    @media (max-width: 480px) {
+      .hero-stats { flex-direction: column; gap: 1.5rem; }
+      .hero-buttons { flex-direction: column; align-items: center; }
+      .btn { width: 100%; max-width: 280px; justify-content: center; }
+      .sensor-grid { grid-template-columns: 1fr; }
+      .param-grid { grid-template-columns: 1fr; }
+      .code-tab { padding: 0.75rem 1rem; font-size: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-pattern"></div>
+  <div class="particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
+  <nav id="navbar">
+    <a href="#" class="logo">
+      <div class="logo-icon">🌱</div>
+      TerraSoil
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#parameters">Parameters</a></li>
+      <li><a href="#code">Code</a></li>
+      <li><a href="#applications">Applications</a></li>
+      <li><a href="#developer">Developer</a></li>
+      <li><a href="#cta" class="nav-cta">Get Started</a></li>
+    </ul>
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </nav>
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-text" data-aos="fade-right" data-aos-duration="1000">
+        <h1>Smart Agriculture Starts Here</h1>
+        <p class="subtitle">TerraSoil is your Arduino library for the SN-300 10-in-1 NPK Soil Sensor. Monitor moisture, temperature, pH, NPK, and more with a single line of code.</p>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-number">10</span>
+            <span class="stat-label">Parameters</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">1</span>
+            <span class="stat-label">Line of Code</span>
+          </div>
+          <div class="stat">
+            <span class="stat-number">30%</span>
+            <span class="stat-label">Water Saved</span>
+          </div>
+        </div>
+        <div class="hero-buttons">
+          <a href="#code" class="btn btn-primary">
+            <i class="fas fa-download"></i>
+            Download Library
+          </a>
+          <a href="#features" class="btn btn-secondary">
+            <i class="fas fa-book"></i>
+            Documentation
+          </a>
+        </div>
+      </div>
+      <div class="hero-visual" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
+        <div class="sensor-card">
+          <div class="sensor-header">
+            <div class="sensor-icon">📡</div>
+            <div class="sensor-title">
+              <h3>Live Sensor Data</h3>
+              <span>SN-300 NPK Sensor</span>
+            </div>
+          </div>
+          <div class="sensor-grid">
+            <div class="sensor-item">
+              <div class="sensor-item-icon">💧</div>
+              <div class="sensor-item-value" id="moistureVal">45.2%</div>
+              <div class="sensor-item-label">Moisture</div>
+            </div>
+            <div class="sensor-item">
+              <div class="sensor-item-icon">🌡️</div>
+              <div class="sensor-item-value" id="tempVal">23.5°C</div>
+              <div class="sensor-item-label">Temperature</div>
+            </div>
+            <div class="sensor-item">
+              <div class="sensor-item-icon">🧪</div>
+              <div class="sensor-item-value" id="phVal">6.8</div>
+              <div class="sensor-item-label">pH Level</div>
+            </div>
+            <div class="sensor-item">
+              <div class="sensor-item-icon">⚡</div>
+              <div class="sensor-item-value" id="ecVal">850</div>
+              <div class="sensor-item-label">EC (µS/cm)</div>
+            </div>
+            <div class="sensor-item">
+              <div class="sensor-item-icon">🔴</div>
+              <div class="sensor-item-value" id="nVal">125</div>
+              <div class="sensor-item-label">Nitrogen</div>
+            </div>
+            <div class="sensor-item">
+              <div class="sensor-item-icon">🟠</div>
+              <div class="sensor-item-value" id="pVal">85</div>
+              <div class="sensor-item-label">Phosphorus</div>
+            </div>
+          </div>
+        </div>
+        <div class="float-element float-1"></div>
+        <div class="float-element float-2"></div>
+        <div class="float-element float-3"></div>
+      </div>
+    </div>
+  </section>
+  <section class="features" id="features">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag">Why TerraSoil</span>
+      <h2 class="section-title">Precision Agriculture Made Simple</h2>
+      <p class="section-subtitle">Everything you need to build smart farming solutions with professional-grade soil monitoring.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="feature-icon">⚡</div>
+        <h3>One-Line Reading</h3>
+        <p>Get all 10 soil parameters with a single function call. No complex Modbus setup or CRC calculations required.</p>
+      </div>
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="feature-icon">📊</div>
+        <h3>Complete Data</h3>
+        <p>Monitor moisture, temperature, pH, EC, NPK nutrients, salinity, TDS, and fertility all at once.</p>
+      </div>
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="feature-icon">🔌</div>
+        <h3>Easy Integration</h3>
+        <p>Works seamlessly with ESP32, ESP8266, and Arduino boards. RS485 communication handled automatically.</p>
+      </div>
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+        <div class="feature-icon">🌐</div>
+        <h3>IoT Ready</h3>
+        <p>Built for modern agriculture. Easily integrate with MQTT, REST APIs, and cloud platforms.</p>
+      </div>
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
+        <div class="feature-icon">📚</div>
+        <h3>Well Documented</h3>
+        <p>Comprehensive documentation with examples, wiring diagrams, and best practices for every use case.</p>
+      </div>
+      <div class="feature-card" data-aos="fade-up" data-aos-delay="600">
+        <div class="feature-icon">🛡️</div>
+        <h3>Reliable & Robust</h3>
+        <p>Automatic error handling, timeout management, and CRC validation for production-ready deployments.</p>
+      </div>
+    </div>
+  </section>
+  <section class="parameters" id="parameters">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag">10-in-1 Sensor</span>
+      <h2 class="section-title">Measured Parameters</h2>
+      <p class="section-subtitle">Professional-grade measurements for complete soil analysis.</p>
+    </div>
+    <div class="param-grid">
+      <div class="param-item" data-aos="zoom-in" data-aos-delay="50">
+        <div class="param-icon">💧</div>
+        <div class="param-name">Moisture</div>
+        <div class="param-range">0-100%</div>
+      </div>
+      <div class="param-item" data-aos="zoom-in" data-aos-delay="100">
+        <div class="param-icon">🌡️</div>
+        <div class="param-name">Temperature</div>
+        <div class="param-range">-40 to 80°C</div>
+      </div>
+      <div class="param-item" data-aos="zoom-in" data-aos-delay="150">
+        <div class="param-icon">⚡</div>
+        <div class="param-name">EC</div>
+        <div class="param-range">0-20000 µS/cm</div>
+      </div>
+      <div class="param-item" data-aos="zoom-in" data-aos-delay="200">
+        <div class="param-icon">🧪</div>
+        <div class="param-name">pH</div>
+        <div class="param-range">3-9 pH</div>
+      </div>
+      <div class="param-item" data-aos="zoom-in" data-aos-delay="250">
+        <div class="param-icon">🔴</div>
+        <div class="param-name">Nitrogen</div>
+        <div class="param-range">0-2999 mg/kg</div>
+      </div>
+      <div class="param-item" data-aos="zoom-in" data-aos-delay="300">
+        <div class="param-icon">🟠</div>
+        <div class="param-name">Phosphorus</div>
+        <div class="param-range">0-2999 mg/kg</div>
+      </div>
+      <div class="param-item" data-aos="zoom-in" data-aos-delay="350">
+        <div class="param-icon">🟡</div>
+        <div class="param-name">Potassium</div>
+        <div class="param-range">0-2999 mg/kg</div>
+      </div>
+      <div class="param-item" data-aos="zoom-in" data-aos-delay="400">
+        <div class="param-icon">🧂</div>
+        <div class="param-name">Salinity</div>
+        <div class="param-range">0-20000 index</div>
+      </div>
+      <div class="param-item" data-aos="zoom-in" data-aos-delay="450">
+        <div class="param-icon">💎</div>
+        <div class="param-name">TDS</div>
+        <div class="param-range">0-10000 mg/L</div>
+      </div>
+      <div class="param-item" data-aos="zoom-in" data-aos-delay="500">
+        <div class="param-icon">🌾</div>
+        <div class="param-name">Fertility</div>
+        <div class="param-range">0-3000 mg/kg</div>
+      </div>
+    </div>
+  </section>
+  <section class="code-section" id="code">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag">Quick Start</span>
+      <h2 class="section-title">Simple, Powerful Code</h2>
+      <p class="section-subtitle">Get started in minutes with our intuitive API.</p>
+    </div>
+    <div class="code-showcase" data-aos="fade-up" data-aos-delay="200">
+      <div class="code-tabs">
+        <button class="code-tab active" onclick="showTab('basic')">Basic Reading</button>
+        <button class="code-tab" onclick="showTab('irrigation')">Auto Irrigation</button>
+        <button class="code-tab" onclick="showTab('mqtt')">MQTT IoT</button>
+      </div>
+      <div class="code-block">
+        <button class="copy-btn" onclick="copyCode()"><i class="fas fa-copy"></i> Copy</button>
+        <pre id="codeContent"><span class="keyword">#include</span> <span class="string">&lt;TerraSoil.h&gt;</span>
+
+<span class="keyword">HardwareSerial</span> RS485Serial(<span class="number">1</span>);
+<span class="keyword">TerraSoil</span> sensor(&amp;RS485Serial, <span class="number">1</span>);
+<span class="keyword">TerraSoilData</span> data;
+
+<span class="keyword">void</span> <span class="function">setup</span>() {
+  Serial.<span class="function">begin</span>(<span class="number">115200</span>);
+  sensor.<span class="function">begin</span>(<span class="number">44</span>, <span class="number">43</span>, <span class="number">4800</span>);
+}
+
+<span class="keyword">void</span> <span class="function">loop</span>() {
+  <span class="keyword">if</span> (sensor.<span class="function">readSensor</span>(data)) {
+    Serial.<span class="function">printf</span>(<span class="string">"Moisture: %.1f%%\n"</span>, data.moisture);
+    Serial.<span class="function">printf</span>(<span class="string">"Temp: %.1f°C\n"</span>, data.temperature);
+    Serial.<span class="function">printf</span>(<span class="string">"pH: %.1f\n"</span>, data.ph);
+  }
+  <span class="function">delay</span>(<span class="number">5000</span>);
+}</pre>
+      </div>
+    </div>
+  </section>
+  <section class="applications" id="applications">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag">Use Cases</span>
+      <h2 class="section-title">Real-World Applications</h2>
+      <p class="section-subtitle">See how TerraSoil transforms agriculture across industries.</p>
+    </div>
+    <div class="app-cards">
+      <div class="app-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="app-image">🍅</div>
+        <div class="app-content">
+          <h3>Greenhouse Cultivation</h3>
+          <p>Precise pH and moisture control for tomatoes, peppers, and leafy greens. Automated environmental management.</p>
+          <div class="app-stats">
+            <div class="app-stat">
+              <div class="app-stat-value">+35%</div>
+              <div class="app-stat-label">Yield</div>
+            </div>
+            <div class="app-stat">
+              <div class="app-stat-value">-40%</div>
+              <div class="app-stat-label">Water Use</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="app-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="app-image">🌾</div>
+        <div class="app-content">
+          <h3>Smart Farms</h3>
+          <p>Multi-zone sensor deployment with cloud connectivity. Real-time monitoring and automated irrigation.</p>
+          <div class="app-stats">
+            <div class="app-stat">
+              <div class="app-stat-value">20+</div>
+              <div class="app-stat-label">Sensors</div>
+            </div>
+            <div class="app-stat">
+              <div class="app-stat-value">1-2yr</div>
+              <div class="app-stat-label">ROI</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="app-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="app-image">🔬</div>
+        <div class="app-content">
+          <h3>Research & Education</h3>
+          <p>Perfect for agricultural research, student projects, and university labs. Complete documentation included.</p>
+          <div class="app-stats">
+            <div class="app-stat">
+              <div class="app-stat-value">~$50</div>
+              <div class="app-stat-label">Setup Cost</div>
+            </div>
+            <div class="app-stat">
+              <div class="app-stat-value">5min</div>
+              <div class="app-stat-label">Quick Start</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="developer" id="developer">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag">About</span>
+      <h2 class="section-title">Meet the Developer</h2>
+    </div>
+    <div class="dev-card" data-aos="fade-up" data-aos-delay="200">
+      <div class="dev-avatar">👨‍💻</div>
+      <div class="dev-info">
+        <h3>Kennedy KITOKO MUYUNGA</h3>
+        <p class="dev-title">Student & IoT Developer at Beijing Institute of Technology</p>
+        <div class="dev-details">
+          <div class="dev-detail">
+            <i class="fas fa-graduation-cap"></i>
+            <span>B.Eng. Mechanical & Electrical (3rd Year)</span>
+          </div>
+          <div class="dev-detail">
+            <i class="fas fa-university"></i>
+            <span>Beijing Institute of Technology</span>
+          </div>
+          <div class="dev-detail">
+            <i class="fas fa-phone"></i>
+            <span>+86 131 2698 0849</span>
+          </div>
+          <div class="dev-detail">
+            <i class="fas fa-envelope"></i>
+            <span>kennedy.kitoko@bit.edu.cn</span>
+          </div>
+        </div>
+        <div class="dev-socials">
+          <a href="https://twitter.com/kennedykitoko13" class="social-link" target="_blank"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-weixin"></i></a>
+          <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+          <a href="mailto:kennedy.kitoko@bit.edu.cn" class="social-link"><i class="fas fa-envelope"></i></a>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="cta" id="cta">
+    <div class="cta-content" data-aos="zoom-in">
+      <h2>Ready to Grow Smarter?</h2>
+      <p>Download TerraSoil today and revolutionize your agricultural projects with precision soil monitoring.</p>
+      <div class="cta-buttons">
+        <a href="#" class="btn btn-primary"><i class="fas fa-download"></i> Download Now</a>
+        <a href="#" class="btn btn-secondary"><i class="fab fa-github"></i> View on GitHub</a>
+      </div>
+    </div>
+  </section>
+  <footer>
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="#" class="logo"><div class="logo-icon">🌱</div> TerraSoil</a>
+        <p>Making agriculture smarter, one sensor at a time. Professional soil monitoring for the modern farmer.</p>
+      </div>
+      <div class="footer-column">
+        <h4>Documentation</h4>
+        <ul>
+          <li><a href="#">Quick Start</a></li>
+          <li><a href="#">API Reference</a></li>
+          <li><a href="#">Wiring Guide</a></li>
+          <li><a href="#">Examples</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="#">GitHub Repo</a></li>
+          <li><a href="#">Arduino Library</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Support</a></li>
+        </ul>
+      </div>
+      <div class="footer-column">
+        <h4>Connect</h4>
+        <ul>
+          <li><a href="#">Twitter</a></li>
+          <li><a href="#">WeChat</a></li>
+          <li><a href="#">Email</a></li>
+          <li><a href="#">Beijing IT</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 TerraSoil. Developed with ❤️ by <a href="#">Kennedy KITOKO MUYUNGA</a></p>
+      <p>MIT License</p>
+    </div>
+  </footer>
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 800, easing: 'ease-out-cubic', once: true, offset: 100 });
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => { navbar.classList.toggle('scrolled', window.scrollY > 50); });
+    function toggleMenu() { document.getElementById('navLinks').classList.toggle('active'); }
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      link.addEventListener('click', () => { document.getElementById('navLinks').classList.remove('active'); });
+    });
+    const codeExamples = {
+      basic: `<span class="keyword">#include</span> <span class="string">&lt;TerraSoil.h&gt;</span>\n\n<span class="keyword">HardwareSerial</span> RS485Serial(<span class="number">1</span>);\n<span class="keyword">TerraSoil</span> sensor(&amp;RS485Serial, <span class="number">1</span>);\n<span class="keyword">TerraSoilData</span> data;\n\n<span class="keyword">void</span> <span class="function">setup</span>() {\n  Serial.<span class="function">begin</span>(<span class="number">115200</span>);\n  sensor.<span class="function">begin</span>(<span class="number">44</span>, <span class="number">43</span>, <span class="number">4800</span>);\n}\n\n<span class="keyword">void</span> <span class="function">loop</span>() {\n  <span class="keyword">if</span> (sensor.<span class="function">readSensor</span>(data)) {\n    Serial.<span class="function">printf</span>(<span class="string">"Moisture: %.1f%%\\n"</span>, data.moisture);\n    Serial.<span class="function">printf</span>(<span class="string">"Temp: %.1f°C\\n"</span>, data.temperature);\n    Serial.<span class="function">printf</span>(<span class="string">"pH: %.1f\\n"</span>, data.ph);\n  }\n  <span class="function">delay</span>(<span class="number">5000</span>);\n}`,
+      irrigation: `<span class="keyword">#include</span> <span class="string">&lt;TerraSoil.h&gt;</span>\n\n<span class="keyword">#define</span> PUMP_PIN <span class="number">5</span>\n<span class="keyword">#define</span> MOISTURE_MIN <span class="number">30.0</span>\n<span class="keyword">#define</span> MOISTURE_MAX <span class="number">60.0</span>\n\n<span class="keyword">TerraSoil</span> sensor(&amp;Serial1, <span class="number">1</span>);\n<span class="keyword">TerraSoilData</span> data;\n\n<span class="keyword">void</span> <span class="function">loop</span>() {\n  <span class="keyword">if</span> (sensor.<span class="function">readSensor</span>(data)) {\n    <span class="keyword">if</span> (data.moisture < MOISTURE_MIN) {\n      <span class="function">digitalWrite</span>(PUMP_PIN, HIGH);\n      Serial.<span class="function">println</span>(<span class="string">"🚿 Irrigation ON"</span>);\n    } \n    <span class="keyword">else if</span> (data.moisture > MOISTURE_MAX) {\n      <span class="function">digitalWrite</span>(PUMP_PIN, LOW);\n      Serial.<span class="function">println</span>(<span class="string">"✅ Soil hydrated"</span>);\n    }\n  }\n  <span class="function">delay</span>(<span class="number">60000</span>);\n}`,
+      mqtt: `<span class="keyword">#include</span> <span class="string">&lt;TerraSoil.h&gt;</span>\n<span class="keyword">#include</span> <span class="string">&lt;WiFi.h&gt;</span>\n<span class="keyword">#include</span> <span class="string">&lt;PubSubClient.h&gt;</span>\n\n<span class="keyword">const char</span>* mqtt_server = <span class="string">"broker.emqx.io"</span>;\n<span class="keyword">const char</span>* topic = <span class="string">"farm/soil/sensor01"</span>;\n\n<span class="keyword">void</span> <span class="function">publishData</span>() {\n  <span class="keyword">if</span> (!sensor.<span class="function">readSensor</span>(data)) <span class="keyword">return</span>;\n  \n  <span class="keyword">StaticJsonDocument</span>&lt;<span class="number">512</span>&gt; doc;\n  doc[<span class="string">"moisture"</span>] = data.moisture;\n  doc[<span class="string">"temperature"</span>] = data.temperature;\n  doc[<span class="string">"ph"</span>] = data.ph;\n  doc[<span class="string">"nitrogen"</span>] = data.nitrogen;\n  \n  <span class="keyword">char</span> buffer[<span class="number">512</span>];\n  <span class="function">serializeJson</span>(doc, buffer);\n  client.<span class="function">publish</span>(topic, buffer);\n}`
+    };
+    function showTab(tab) {
+      document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+      event.target.classList.add('active');
+      document.getElementById('codeContent').innerHTML = codeExamples[tab];
+    }
+    function copyCode() {
+      const codeContent = document.getElementById('codeContent').innerText;
+      navigator.clipboard.writeText(codeContent);
+      const btn = document.querySelector('.copy-btn');
+      btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
+      setTimeout(() => btn.innerHTML = '<i class="fas fa-copy"></i> Copy', 2000);
+    }
+    function animateSensorValues() {
+      const elements = {
+        moisture: { el: document.getElementById('moistureVal'), min: 40, max: 50, suffix: '%', decimals: 1 },
+        temp: { el: document.getElementById('tempVal'), min: 22, max: 25, suffix: '°C', decimals: 1 },
+        ph: { el: document.getElementById('phVal'), min: 6.5, max: 7.2, suffix: '', decimals: 1 },
+        ec: { el: document.getElementById('ecVal'), min: 800, max: 900, suffix: '', decimals: 0 },
+        n: { el: document.getElementById('nVal'), min: 115, max: 135, suffix: '', decimals: 0 },
+        p: { el: document.getElementById('pVal'), min: 80, max: 95, suffix: '', decimals: 0 }
+      };
+      Object.values(elements).forEach(item => {
+        const value = (Math.random() * (item.max - item.min) + item.min).toFixed(item.decimals);
+        item.el.textContent = value + item.suffix;
+      });
+    }
+    setInterval(animateSensorValues, 3000);
+  </script>
+</body>
+</html>
