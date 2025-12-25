@@ -956,10 +956,15 @@
     </div>
   </section>
   <section class="features" id="features">
-    <div class="section-header" data-aos="fade-up">
-      <span class="section-tag">Why TerraSoil</span>
-      <h2 class="section-title">Precision Agriculture Made Simple</h2>
-      <p class="section-subtitle">Everything you need to build smart farming solutions with professional-grade soil monitoring.</p>
+    <div class="section-header" data-aos="fade-up" style="display: flex; align-items: center; justify-content: center; gap: 40px; margin-bottom: 40px;">
+      <div style="flex: 1; max-width: 500px;">
+        <span class="section-tag">Why TerraSoil</span>
+        <h2 class="section-title">Precision Agriculture Made Simple</h2>
+        <p class="section-subtitle">Everything you need to build smart farming solutions with professional-grade soil monitoring.</p>
+      </div>
+      <div style="flex: 1; max-width: 900px; text-align: center;">
+        <img src="terrasoill.jpg" alt="TerraSoil Sensor" style="max-width: 100%; height: auto; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+      </div>
     </div>
     <div class="features-grid">
       <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
@@ -1162,7 +1167,7 @@
         <div class="dev-details">
           <div class="dev-detail">
             <i class="fas fa-graduation-cap"></i>
-            <span>B.Eng. Mechanical & Electrical (3rd Year)</span>
+            <span>B.Eng. Mechatronic (3rd Year)</span>
           </div>
           <div class="dev-detail">
             <i class="fas fa-university"></i>
@@ -1174,7 +1179,7 @@
           </div>
           <div class="dev-detail">
             <i class="fas fa-envelope"></i>
-            <span>kennedy.kitoko@bit.edu.cn</span>
+            <span>kitokokennedy13@gmail.com</span>
           </div>
         </div>
         <div class="dev-socials">
@@ -1186,8 +1191,130 @@
       </div>
     </div>
   </section>
-  <section class="cta" id="cta">
-    <div class="cta-content" data-aos="zoom-in">
+  <section class="hardware" id="hardware" style="background-color: var(--green-dark); padding: 80px 0; margin: 80px 0; color: white;">
+    <div class="section-header" data-aos="fade-up">
+      <span class="section-tag" style="color: var(--green-pale);">Hardware</span>
+      <h2 class="section-title" style="color: white;">TerraSoil ESP32-S3 Development Board</h2>
+      <p class="section-subtitle" style="color: var(--green-pale);">The power of ESP32-S3 for smart and connected agriculture</p>
+    </div>
+    
+    <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+      <div style="display: flex; flex-wrap: wrap; gap: 40px; align-items: center; margin-bottom: 60px;">
+        <div style="flex: 1; min-width: 300px;">
+          <img src="carte_terrasoil.png" alt="Carte TerraSoil ESP32-S3" style="width: 100%; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+          <div style="text-align: center; margin-top: 20px;">
+            <a href="https://github.com/kennedy-kitoko/TERRA-AI/tree/main/TERRA_AI_CARTE" target="_blank" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px;">
+              <i class="fab fa-github"></i> View on GitHub
+            </a>
+          </div>
+        </div>
+        
+        <div style="flex: 1; min-width: 300px;">
+          <h3 style="color: white; margin-bottom: 20px; font-size: 1.8rem;">Key Features</h3>
+          
+          <div style="display: grid; grid-template-columns: 1fr; gap: 15px; margin-bottom: 30px;">
+            <div style="background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.1);">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="background: rgba(64, 145, 108, 0.2); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                  <i class="fas fa-microchip" style="color: var(--green-pale); font-size: 1.2rem;"></i>
+                </div>
+                <div>
+                  <h4 style="margin: 0 0 4px 0; color: var(--earth-light);">ESP32-S3</h4>
+                  <p style="margin: 0; color: var(--earth-lighter); font-size: 0.9rem;">Dual-core Xtensa LX7 up to 240MHz</p>
+                </div>
+              </div>
+            </div>
+            
+            <div style="background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.1);">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="background: rgba(64, 145, 108, 0.2); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                  <i class="fas fa-wifi" style="color: var(--green-pale); font-size: 1.2rem;"></i>
+                </div>
+                <div>
+                  <h4 style="margin: 0 0 4px 0; color: var(--earth-light);">Triple Connectivity</h4>
+                  <p style="margin: 0; color: var(--earth-lighter); font-size: 0.9rem;">WiFi 2.4GHz, Bluetooth 5.0, LoRa</p>
+                </div>
+              </div>
+            </div>
+            
+            <div style="background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.1);">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="background: rgba(255, 152, 0, 0.2); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                  <i class="fas fa-battery-full" style="color: var(--green-pale); font-size: 1.2rem;"></i>
+                </div>
+                <div>
+                  <h4 style="margin: 0 0 4px 0; color: var(--earth-light);">Advanced Power Management</h4>
+                  <p style="margin: 0; color: var(--earth-lighter); font-size: 0.9rem;">Plug & Play battery and solar panel with smart energy management for several months of autonomy</p>
+                </div>
+              </div>
+            </div>
+            
+            <div style="background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.1);">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="background: rgba(64, 145, 108, 0.2); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
+                  <i class="fas fa-microchip" style="color: var(--green-pale); font-size: 1.2rem;"></i>
+                </div>
+                <div>
+                  <h4 style="margin: 0 0 4px 0; color: var(--earth-light);">Integrated RS485</h4>
+                  <p style="margin: 0; color: var(--earth-lighter); font-size: 0.9rem;">Native support for 10-in-1 NPK sensor</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div style="background: rgba(76, 175, 80, 0.15); padding: 20px; border-radius: 12px; border-right: 5px solid var(--green-light);">
+            <h4 style="margin-top: 0; color: var(--green-light); display: flex; align-items: center; gap: 10px;">
+              <i class="fas fa-brain" style="color: var(--green-light);"></i>
+              Embedded AI & Power Management
+            </h4>
+            <p style="margin-bottom: 0; color: var(--earth-lighter); line-height: 1.6;">
+              The ESP32-S3 runs AI models directly on the board for real-time analysis. <strong>Plug & Play System</strong> with smart energy management:
+            </p>
+            <ul style="margin: 10px 0 0 0; padding-left: 20px; color: var(--earth-lighter);">
+              <li>Automatic charging via integrated solar panel</li>
+              <li>Smart LiPo/LiFePO4 battery management</li>
+              <li>Ultra-low power deep sleep mode (a few µA)</li>
+              <li>Several months of autonomy on a single charge</li>
+              <li>Protection against overvoltage and deep discharge</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div style="background: rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 30px; border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+        <h3 style="color: var(--earth-light); margin-top: 0; margin-bottom: 20px; font-size: 1.5rem;">Goal: Plug & Play Smart Agriculture</h3>
+        <p style="color: var(--earth-lighter); line-height: 1.7; margin-bottom: 25px;">
+          The TerraSoil board is designed for precision agriculture with <strong>no energy worries</strong>.
+          Its intelligent energy management system provides several months of autonomy, with plug & play support for battery and solar panel.
+          The combination of ESP32-S3 and our energy optimization algorithms ensures maximum performance with minimal consumption.
+        </p>
+        <div style="display: flex; flex-wrap: wrap; gap: 15px; margin-top: 30px;">
+          <div style="flex: 1; min-width: 200px; background: rgba(76, 175, 80, 0.1); padding: 15px; border-radius: 10px; border-left: 4px solid var(--green-light);">
+            <h4 style="margin: 0 0 10px 0; color: var(--earth-light);">Open Source</h4>
+            <p style="margin: 0; color: var(--earth-lighter); font-size: 0.9rem; line-height: 1.5;">
+              All design files are available on GitHub under open source license.
+            </p>
+          </div>
+          <div style="flex: 1; min-width: 200px; background: rgba(33, 150, 243, 0.1); padding: 15px; border-radius: 10px; border-left: 4px solid #2196f3;">
+            <h4 style="margin: 0 0 10px 0; color: var(--earth-light);">Documentation Complète</h4>
+            <p style="margin: 0; color: var(--earth-lighter); font-size: 0.9rem; line-height: 1.5;">
+              Detailed guides for assembly, programming, and deployment.
+            </p>
+          </div>
+          <div style="flex: 1; min-width: 200px; background: rgba(255, 152, 0, 0.1); padding: 15px; border-radius: 10px; border-left: 4px solid #ff9800;">
+            <h4 style="margin: 0 0 10px 0; color: var(--earth-light);">Communauté Active</h4>
+            <p style="margin: 0; color: var(--earth-lighter); font-size: 0.9rem; line-height: 1.5;">
+              Join our community for support and regular updates.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta" id="cta" style="position: relative; overflow: hidden;">
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 120%; background-image: url('SMARTFARM.jpg'); background-size: cover; background-position: right center; opacity: 1; z-index: 0;"></div>
+    <div class="cta-content" data-aos="zoom-in" style="position: relative; z-index: 1;">
       <h2>Ready to Grow Smarter?</h2>
       <p>Download TerraSoil today and revolutionize your agricultural projects with precision soil monitoring.</p>
       <div class="cta-buttons">
