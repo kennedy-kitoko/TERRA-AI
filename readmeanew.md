@@ -7,6 +7,10 @@
 ![License](https://img.shields.io/badge/license-MIT-blue)
 ![Platform](https://img.shields.io/badge/platform-ESP32-orange)
 
+
+
+![Description de l'image](TERRASOIL.png)
+
 **Bibliothèque Arduino pour capteur NPK Soil Sensor 10-en-1 RS485**
 
 *Révolutionnez votre agriculture avec l'intelligence artificielle et la précision des données*
