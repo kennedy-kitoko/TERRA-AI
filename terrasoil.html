@@ -722,12 +722,48 @@
       border-top: 1px solid rgba(116, 198, 157, 0.2);
     }
     .footer-content {
-      max-width: 1400px;
+      max-width: 1200px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 4rem;
-      margin-bottom: 3rem;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 3rem;
+      padding: 0 2rem;
+    }
+    .footer-cta {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .github-btn, .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0.6rem 1.2rem;
+      border-radius: 50px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    .github-btn {
+      background: #333;
+      color: white;
+      border: 1px solid #444;
+    }
+    .github-btn:hover {
+      background: #444;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .download-btn {
+      background: var(--green-primary);
+      color: white;
+      border: 1px solid var(--green-light);
+    }
+    .download-btn:hover {
+      background: var(--green-light);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(64, 145, 108, 0.3);
     }
     .footer-brand { max-width: 350px; }
     .footer-brand .logo { margin-bottom: 1.5rem; }
@@ -1155,8 +1191,8 @@
       <h2>Ready to Grow Smarter?</h2>
       <p>Download TerraSoil today and revolutionize your agricultural projects with precision soil monitoring.</p>
       <div class="cta-buttons">
-        <a href="#" class="btn btn-primary"><i class="fas fa-download"></i> Download Now</a>
-        <a href="#" class="btn btn-secondary"><i class="fab fa-github"></i> View on GitHub</a>
+        <a href="https://github.com/kennedy-kitoko/TERRA-AI/blob/main/library/TerraSoil.zip" class="btn btn-primary" download><i class="fas fa-download"></i> Download Library</a>
+        <a href="https://github.com/kennedy-kitoko/TERRA-AI" target="_blank" class="btn btn-secondary"><i class="fab fa-github"></i> View on GitHub</a>
       </div>
     </div>
   </section>
